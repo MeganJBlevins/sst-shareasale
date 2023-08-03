@@ -1,6 +1,5 @@
 const sendHttpGet = require('sendHttpGet');
 const sha256 = require('sha256');
-const getTimestampMillis = require('getTimestampMillis');
 const logToConsole = require('logToConsole');
 const JSON = require('JSON');
 
@@ -10,13 +9,15 @@ var api_token      = data.api_token;
 var api_secret_key = data.api_secret;
 var api_version    = 3.0;
 var action_verb    = 'new';
-var my_timestamp   = getTimestampMillis();
+var my_timestamp   = data.date;
+var sscid = data.sscid;
 
 // authentication
 var sig        = api_token + ":" + my_timestamp + ":" + action_verb + ":" + api_secret_key;
 
-var url  = 'https://shareasale.com';
-var path = '/w.cfm?tracking=' + data.order_number + '&amount=' + data.amount + '&merchantID=' + data.merchant_id + '&transtype=sale&token=' + data.api_token + '&version=3.0';
+var url  = 'https://api.shareasale.com';
+var path = '/w.cfm?sscid='+ sscid +'&merchantId=' + my_merchant_id + '&token=' + api_token + '&version=' + api_version +'&action=' + action_verb +'&transtype=sale&amount='+ data.amount +'&tracking='+ data.order_number;
+// may need &userId=xxx
 var auth = "";
 logToConsole('url: ' + url + path);
 sha256(sig, (digest) => {
